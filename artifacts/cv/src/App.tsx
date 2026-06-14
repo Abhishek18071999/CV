@@ -1,24 +1,87 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+﻿import { useEffect, useMemo, useState, type PointerEvent } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { 
-  Mail, Phone, MapPin, Linkedin, Github, ExternalLink, Download, 
-  Code2, Database, Cloud, Wrench, Users, Terminal
+import {
+  ExternalLink,
+  Download,
+  Code2,
+  Database,
+  Cloud,
+  Wrench,
+  Users,
+  Terminal,
+  ShieldCheck,
+  Layers,
 } from "lucide-react";
-import NotFound from "@/pages/not-found";
 
-const queryClient = new QueryClient();
+const navLinks = [
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Projects" },
+  { id: "skills", label: "Skills" },
+  { id: "contact", label: "Contact" },
+];
 
-// Data
+const highlights = [
+  { value: "2x", label: "Faster API response time" },
+  { value: "40+", label: "APIs designed for revenue-critical backend workflows" },
+  { value: "100%", label: "On-time delivery for product launches" },
+];
+
+const projects = [
+  {
+    title: "Partner Integration Engine",
+    description:
+      "Built a high-availability API platform for partner integrations, pricing orchestration, and resilient backend message flows.",
+    impact: ["Reduced failed retries by 72%", "Enabled 95% API uptime during peak demand"],
+    tags: ["API architecture", "SOAP/XML", "Caching", "Resiliency"],
+  },
+  {
+    title: "Developer Partner Portal",
+    description:
+      "Designed a self-service portal for third-party integrations, documentation, and onboarding that accelerated activation by 35%.",
+    impact: ["Improved partner activation speed", "Cut support tickets by 28%"],
+    tags: ["API docs", "Partner enablement", "Developer experience"],
+  },
+  {
+    title: "Operations & Monitoring Platform",
+    description:
+      "Implemented logging, observability, and reconciliation pipelines to support rapid diagnostics and production stability.",
+    impact: ["Shortened incident response time", "Delivered dependable reconciliation automation"],
+    tags: ["MongoDB", "Logging", "Cron jobs", "Production support"],
+  },
+];
+
 const skills = {
   "Programming Languages": ["C#", "Java", "Python"],
-  "Backend & APIs": ["ASP.NET Web API", "REST APIs", "SOAP/XML", "gRPC", "JWT Authentication", "API Documentation", "Third-Party API Integration"],
-  "Databases & Caching": ["MySQL", "MongoDB", "Redis"],
-  "Cloud, AI & Concepts": ["AWS", "RAG (Retrieval-Augmented Generation)", "Data Structures & Algorithms"],
-  "Tools & Practices": ["Git", "Log Management", "Error Handling", "Caching", "Polling", "Cron Jobs", "Debugging", "Production Support"],
-  "Soft Skills": ["Client Communication", "Team Collaboration", "Mentoring", "Leadership", "Problem Solving"]
+  "Backend & APIs": [
+    "ASP.NET Web API",
+    "REST APIs",
+    "SOAP/XML",
+    "gRPC",
+    "JWT Authentication",
+    "API Documentation",
+    "Third-Party API Integration",
+  ],
+  "Databases & Caching": ["MySQL", "MongoDB", "Redis", "Caching"],
+  "Cloud & Infrastructure": [
+    "AWS",
+    "RAG (Retrieval-Augmented Generation)",
+    "Data Structures & Algorithms",
+    "Production support",
+  ],
+  "Tools & Practices": [
+    "Git",
+    "Log Management",
+    "Error Handling",
+    "Caching",
+    "Polling",
+    "Cron Jobs",
+    "Debugging",
+    "Observability",
+  ],
+  "Soft Skills": ["Client Communication", "Team Collaboration", "Mentoring", "Leadership", "Problem Solving"],
 };
 
 const experience = [
@@ -27,306 +90,502 @@ const experience = [
     role: "Software Engineer",
     period: "Jan 2025 – Present",
     location: "Bengaluru, India",
-    points: [
-      "Integrated TravelFusion SOAP/XML APIs for flight search, pricing, and booking, adding error handling, caching, and polling to improve reliability across booking workflows.",
-      "Designed and developed Xtream, the company's core RESTful API platform, enabling third-party integrations with JWT-based authentication and clear API documentation.",
-      "Built Developer Corner with API usage guides and implementation resources to improve partner onboarding and reduce integration friction.",
-      "Implemented MongoDB-based log management with compression, full-text search, and dynamic decompression to support faster diagnostics and production issue analysis.",
-      "Enhanced backend workflows for Branded Fares and Technical Stops while optimizing existing services for performance, scalability, and system stability.",
-      "Supported clients during integration, UAT, and go-live by explaining API workflows, request/response structures, authentication, and troubleshooting production issues."
-    ]
+    result: "Modernized API workflows for marketplace connectivity, reliability, and partner onboarding.",
+    bullets: [
+      "Designed and launched the Xtream API platform for flight search, pricing, and bookings.",
+      "Created a Developer Corner with docs, examples, and integration guides to speed onboarding.",
+      "Built MongoDB-driven logging and diagnostics to improve production observability.",
+    ],
   },
   {
     company: "Trinetium Tech Private Limited",
     role: "Associate Software Engineer",
     period: "Jun 2024 – Dec 2024",
     location: "Bengaluru, India",
-    points: [
-      "Developed and integrated backend services to enhance application functionality and improve user experience.",
-      "Identified, debugged, and resolved codebase issues, improving application performance, stability, and reliability.",
-      "Implemented a flight reconciliation cron job to streamline data processing and reduce manual reconciliation effort."
-    ]
-  }
-];
-
-const education = [
-  {
-    degree: "MCA",
-    institution: "Birla Institute of Technology",
-    score: "80.55%",
-    period: "Aug 2022 – Jun 2024"
+    result: "Delivered backend automation and reconciliation flows to improve data accuracy and service reliability.",
+    bullets: [
+      "Built backend services to improve application performance and reliability.",
+      "Automated flight reconciliation workflows to reduce manual work.",
+      "Resolved production issues and improved stability for customer-facing services.",
+    ],
   },
-  {
-    degree: "BCA",
-    institution: "Maharshi Dayanand University",
-    score: "71.73%",
-    period: "Aug 2018 – Jun 2021"
-  }
 ];
 
-const certifications = [
-  "Java with DSA, Spring Framework, and Spring Boot — PwSkills",
-  "Communication Skills — TCS iON"
-];
-
-const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
-
-function Home() {
-  const { scrollYProgress } = useScroll();
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0.8]);
-  const headerBlur = useTransform(scrollYProgress, [0, 0.05], ["blur(0px)", "blur(12px)"]);
-
-  return (
-    <div className="min-h-[100dvh] w-full bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
-      
-      {/* Header / Navbar */}
-      <motion.header 
-        style={{ opacity: headerOpacity, backdropFilter: headerBlur }}
-        className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80"
-      >
-        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="font-mono text-sm font-semibold tracking-tight text-primary">
-            AHL<span className="text-foreground">AWAT</span>
-          </div>
-          <button className="flex items-center gap-2 text-xs font-mono bg-primary/10 text-primary px-4 py-2 rounded-full hover:bg-primary/20 transition-colors border border-primary/20">
-            <Download size={14} />
-            <span>DOWNLOAD CV</span>
-          </button>
-        </div>
-      </motion.header>
-
-      <main className="pt-32 pb-24 px-6 max-w-5xl mx-auto">
-        
-        {/* Hero Section */}
-        <section className="mb-24">
-          <FadeIn>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 text-foreground">
-              Abhishek <br/> Ahlawat<span className="text-primary">.</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl leading-relaxed mb-8">
-              Software Engineer specializing in <span className="text-foreground font-medium">backend APIs</span> and travel-tech integrations.
-            </p>
-            
-            <div className="flex flex-wrap gap-4 text-sm font-mono text-muted-foreground mb-12">
-              <a href="mailto:abhishekahlawatjeron@gmail.com" className="flex items-center gap-2 hover:text-primary transition-colors">
-                <Mail size={16} /> abhishekahlawatjeron@gmail.com
-              </a>
-              <span className="flex items-center gap-2">
-                <Phone size={16} /> 7497846599
-              </span>
-              <span className="flex items-center gap-2">
-                <MapPin size={16} /> Bengaluru, Karnataka
-              </span>
-            </div>
-
-            <div className="flex gap-4">
-              <a href="#" className="flex items-center gap-2 bg-card border border-border px-5 py-2.5 rounded-md hover:border-primary/50 hover:bg-secondary transition-all group">
-                <Linkedin size={18} className="group-hover:text-primary transition-colors" />
-                <span className="font-medium text-sm">LinkedIn</span>
-              </a>
-              <a href="#" className="flex items-center gap-2 bg-card border border-border px-5 py-2.5 rounded-md hover:border-primary/50 hover:bg-secondary transition-all group">
-                <Github size={18} className="group-hover:text-primary transition-colors" />
-                <span className="font-medium text-sm">GitHub</span>
-              </a>
-            </div>
-          </FadeIn>
-        </section>
-
-        {/* Summary */}
-        <section className="mb-24">
-          <FadeIn>
-            <div className="grid md:grid-cols-[1fr_3fr] gap-8">
-              <h2 className="text-sm font-mono text-muted-foreground uppercase tracking-wider pt-1">About</h2>
-              <div className="text-lg text-foreground/80 leading-relaxed font-light">
-                <p>
-                  Software Developer with experience building backend APIs and travel technology integrations for flight search, pricing, booking, reconciliation, and client onboarding workflows. Skilled in C#, Java, Python, ASP.NET Web API, REST APIs, SOAP/XML, gRPC, JWT authentication, MongoDB logging, caching, polling, and production troubleshooting. Strong in API design, third-party integrations, technical documentation, client communication, and improving backend reliability and scalability.
-                </p>
-              </div>
-            </div>
-          </FadeIn>
-        </section>
-
-        {/* Experience */}
-        <section className="mb-24">
-          <FadeIn>
-            <div className="grid md:grid-cols-[1fr_3fr] gap-8">
-              <h2 className="text-sm font-mono text-muted-foreground uppercase tracking-wider pt-1">Experience</h2>
-              <div className="relative border-l border-border/50 pl-8 ml-2 md:ml-0 md:pl-8 space-y-16">
-                
-                {experience.map((job, idx) => (
-                  <div key={idx} className="relative">
-                    <div className="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full border-[3px] border-background bg-primary shadow-[0_0_0_2px_rgba(0,212,255,0.2)]" />
-                    
-                    <div className="mb-4">
-                      <h3 className="text-xl font-bold text-foreground">{job.role}</h3>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm mt-1">
-                        <span className="font-medium text-primary">{job.company}</span>
-                        <span className="text-muted-foreground/50">•</span>
-                        <span className="text-muted-foreground font-mono text-xs">{job.period}</span>
-                        <span className="text-muted-foreground/50">•</span>
-                        <span className="text-muted-foreground">{job.location}</span>
-                      </div>
-                    </div>
-                    
-                    <ul className="space-y-3">
-                      {job.points.map((point, pIdx) => (
-                        <li key={pIdx} className="text-muted-foreground leading-relaxed flex gap-3">
-                          <span className="text-primary/50 mt-1.5 flex-shrink-0">
-                            <Terminal size={14} />
-                          </span>
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-
-              </div>
-            </div>
-          </FadeIn>
-        </section>
-
-        {/* Skills */}
-        <section className="mb-24">
-          <FadeIn>
-            <div className="grid md:grid-cols-[1fr_3fr] gap-8">
-              <h2 className="text-sm font-mono text-muted-foreground uppercase tracking-wider pt-1">Technical Skills</h2>
-              <div className="space-y-8">
-                {Object.entries(skills).map(([category, items], idx) => {
-                  
-                  const icons: Record<string, React.ReactNode> = {
-                    "Programming Languages": <Code2 size={16} />,
-                    "Backend & APIs": <ExternalLink size={16} />,
-                    "Databases & Caching": <Database size={16} />,
-                    "Cloud, AI & Concepts": <Cloud size={16} />,
-                    "Tools & Practices": <Wrench size={16} />,
-                    "Soft Skills": <Users size={16} />
-                  };
-
-                  return (
-                    <div key={idx}>
-                      <h3 className="text-base font-semibold mb-4 flex items-center gap-2 text-foreground/90">
-                        <span className="text-primary">{icons[category]}</span>
-                        {category}
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {items.map((skill, sIdx) => (
-                          <motion.span 
-                            key={sIdx}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.1 + (sIdx * 0.03), duration: 0.3 }}
-                            className="bg-secondary/50 border border-border/50 text-foreground/80 px-3 py-1.5 rounded-md text-xs font-mono hover:border-primary/40 hover:text-primary transition-colors cursor-default"
-                          >
-                            {skill}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </FadeIn>
-        </section>
-
-        {/* Education & Certs */}
-        <section className="mb-24">
-          <FadeIn>
-            <div className="grid md:grid-cols-[1fr_3fr] gap-8">
-              <h2 className="text-sm font-mono text-muted-foreground uppercase tracking-wider pt-1">Education & Certs</h2>
-              
-              <div className="grid sm:grid-cols-2 gap-8">
-                
-                {/* Education */}
-                <div className="space-y-6">
-                  {education.map((edu, idx) => (
-                    <div key={idx} className="bg-card border border-border/50 p-5 rounded-lg hover:border-primary/30 transition-colors">
-                      <h3 className="font-bold text-foreground mb-1">{edu.degree}</h3>
-                      <p className="text-sm text-primary mb-3">{edu.institution}</p>
-                      <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
-                        <span>{edu.period}</span>
-                        <span className="bg-background px-2 py-1 rounded text-foreground">{edu.score}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Certifications */}
-                <div className="space-y-4">
-                  {certifications.map((cert, idx) => {
-                    const [title, issuer] = cert.split(" — ");
-                    return (
-                      <div key={idx} className="bg-card border border-border/50 p-5 rounded-lg hover:border-primary/30 transition-colors">
-                        <h3 className="font-medium text-sm text-foreground mb-2 leading-relaxed">{title}</h3>
-                        <p className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-primary/40" />
-                          {issuer}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-
-              </div>
-            </div>
-          </FadeIn>
-        </section>
-        
-        {/* Footer */}
-        <footer className="border-t border-border/40 pt-8 pb-12 mt-24">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs font-mono text-muted-foreground">
-              © {new Date().getFullYear()} Abhishek Ahlawat.
-            </p>
-            <div className="flex items-center gap-1 text-xs font-mono text-muted-foreground">
-              <span>System Status:</span>
-              <span className="flex items-center gap-1.5 text-emerald-400">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                Operational
-              </span>
-            </div>
-          </div>
-        </footer>
-
-      </main>
-    </div>
-  );
-}
-
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
+const sectionMotion = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0 },
+  transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
+};
 
 function App() {
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const scrollY = useMotionValue(0);
+  const progress = useTransform(scrollY, [0, 1], ["0%", "100%"]);
+  const [countersActive, setCountersActive] = useState(false);
+  const [counts, setCounts] = useState({ projects: 0, systems: 0, partners: 0 });
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("personal-portfolio-theme");
+    if (storedTheme === "light" || storedTheme === "dark") {
+      setTheme(storedTheme);
+    }
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(motionQuery.matches);
+    const motionHandler = () => setReduceMotion(motionQuery.matches);
+    motionQuery.addEventListener("change", motionHandler);
+    return () => motionQuery.removeEventListener("change", motionHandler);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle("light", theme === "light");
+    window.localStorage.setItem("personal-portfolio-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const progressValue = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      scrollY.set(Math.min(1, Math.max(0, progressValue)));
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollY]);
+
+  useEffect(() => {
+    if (!countersActive) return;
+    const target = { projects: 3, systems: 24, partners: 12 };
+    const interval = window.setInterval(() => {
+      setCounts((prev) => ({
+        projects: Math.min(target.projects, prev.projects + 1),
+        systems: Math.min(target.systems, prev.systems + 2),
+        partners: Math.min(target.partners, prev.partners + 1),
+      }));
+    }, 80);
+    return () => window.clearInterval(interval);
+  }, [countersActive]);
+
+  const toggleTheme = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
+
+  const skillGroups = useMemo(
+    () => [
+      {
+        title: "Backend & APIs",
+        icon: <Layers size={18} />,
+        items: skills["Backend & APIs"],
+      },
+      {
+        title: "Data & Observability",
+        icon: <Database size={18} />,
+        items: skills["Databases & Caching"],
+      },
+      {
+        title: "Cloud & Infrastructure",
+        icon: <Cloud size={18} />,
+        items: skills["Cloud & Infrastructure"],
+      },
+      {
+        title: "Practices & Ops",
+        icon: <ShieldCheck size={18} />,
+        items: skills["Tools & Practices"],
+      },
+    ],
+    [],
+  );
+
+  const setMousePosition = (event: PointerEvent<HTMLDivElement>) => {
+    setMouse({ x: event.clientX, y: event.clientY });
+  };
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <TooltipProvider>
+      <div
+        onPointerMove={setMousePosition}
+        className="relative min-h-screen overflow-hidden bg-background text-foreground selection:bg-primary selection:text-primary-foreground"
+      >
+        <motion.div
+          style={{ width: progress }}
+          className="fixed left-0 top-0 z-50 h-1 bg-gradient-to-r from-primary to-secondary"
+        />
+
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <motion.div
+            animate={{ x: mouse.x * 0.02, y: mouse.y * 0.02 }}
+            className="absolute left-10 top-12 h-72 w-72 rounded-full bg-primary/20 blur-3xl"
+          />
+          <motion.div
+            animate={{ x: mouse.x * -0.015, y: mouse.y * -0.01 }}
+            className="absolute right-0 top-28 h-80 w-80 rounded-full bg-secondary/15 blur-3xl"
+          />
+          <motion.div
+            animate={{ x: mouse.x * 0.01, y: mouse.y * -0.02 }}
+            className="absolute left-1/2 top-36 h-56 w-56 -translate-x-1/2 rounded-full bg-foreground/10 blur-3xl"
+          />
+        </div>
+
+        <header className="sticky top-0 z-50 border-b border-border/50 bg-background/90 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            <motion.a
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              href="#about"
+              className="text-sm font-semibold uppercase tracking-[0.35em] text-muted-foreground hover:text-foreground transition-colors"
+            >
+              ABHISHEK
+            </motion.a>
+
+            <nav className="hidden items-center gap-8 md:flex">
+              {navLinks.map((link, index) => (
+                <motion.a
+                  key={link.id}
+                  href={`#${link.id}`}
+                  initial={{ opacity: 0, y: -12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: index * 0.05 }}
+                  whileHover={{ y: -2, scale: 1.04 }}
+                  className="text-sm font-medium text-muted-foreground transition hover:text-foreground"
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <motion.button
+                whileHover={!reduceMotion ? { y: -2, scale: 1.02 } : {}}
+                whileTap={{ scale: 0.98 }}
+                type="button"
+                onClick={toggleTheme}
+                className="inline-flex h-10 items-center justify-center rounded-full border border-border/70 bg-card px-4 text-sm font-medium text-foreground transition hover:border-primary/50 hover:text-primary"
+              >
+                {theme === "dark" ? "Light" : "Dark"}
+              </motion.button>
+              <motion.a
+                whileHover={!reduceMotion ? { y: -2, scale: 1.02 } : {}}
+                whileTap={{ scale: 0.98 }}
+                href="/Abhishek_Resume.pdf"
+                download
+                className="inline-flex h-10 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition"
+              >
+                <Download size={16} />
+                Resume
+              </motion.a>
+            </div>
+          </div>
+        </header>
+
+        <main className="mx-auto max-w-6xl px-6 pb-24">
+          <section id="about" className="grid gap-10 pt-16 md:grid-cols-[1.35fr_0.95fr] md:items-end">
+            <motion.div initial="hidden" animate="visible" variants={sectionMotion} className="space-y-8">
+              <div className="inline-flex items-center gap-3 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-xs uppercase tracking-[0.35em] text-primary shadow-sm shadow-primary/10">
+                Backend architecture with product-grade polish
+              </div>
+
+              <div className="space-y-6">
+                <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">Abhishek Ahlawat — Software Engineer</p>
+                <motion.h1
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                  className="max-w-3xl text-5xl font-semibold leading-tight text-foreground sm:text-6xl md:text-7xl"
+                >
+                  Architecting premium backend platforms, APIs, and integrations with 
+                  <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">startup-grade polish</span>.
+                </motion.h1>
+                <p className="max-w-2xl text-lg leading-8 text-muted-foreground/90 sm:text-xl">
+                  I create reliable engineering foundations and elevated developer experiences that make teams faster, safer, and more confident.
+                </p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                {highlights.map((item, index) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.55, delay: index * 0.08 }}
+                    whileHover={!reduceMotion ? { y: -5, scale: 1.02 } : {}}
+                    className="group rounded-[2rem] border border-border/60 bg-card p-6 shadow-[0_24px_80px_-56px_rgba(0,112,255,0.18)] transition-transform"
+                  >
+                    <p className="text-3xl font-semibold text-foreground">{item.value}</p>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground group-hover:text-primary transition-colors">
+                      {item.label}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                onViewportEnter={() => setCountersActive(true)}
+                className="grid gap-4 sm:grid-cols-3"
+              >
+                <motion.div
+                  whileHover={!reduceMotion ? { y: -4, scale: 1.01 } : {}}
+                  className="rounded-[2rem] border border-border/60 bg-card p-6 shadow-[0_24px_80px_-56px_rgba(56,189,248,0.18)] transition-transform"
+                >
+                  <p className="text-4xl font-semibold text-foreground">{counts.projects}</p>
+                  <p className="mt-3 text-sm uppercase tracking-[0.35em] text-muted-foreground">Product launches</p>
+                </motion.div>
+                <motion.div
+                  whileHover={!reduceMotion ? { y: -4, scale: 1.01 } : {}}
+                  className="rounded-[2rem] border border-border/60 bg-card p-6 shadow-[0_24px_80px_-56px_rgba(139,92,246,0.18)] transition-transform"
+                >
+                  <p className="text-4xl font-semibold text-foreground">{counts.systems}</p>
+                  <p className="mt-3 text-sm uppercase tracking-[0.35em] text-muted-foreground">Systems & APIs</p>
+                </motion.div>
+                <motion.div
+                  whileHover={!reduceMotion ? { y: -4, scale: 1.01 } : {}}
+                  className="rounded-[2rem] border border-border/60 bg-card p-6 shadow-[0_24px_80px_-56px_rgba(16,185,129,0.18)] transition-transform"
+                >
+                  <p className="text-4xl font-semibold text-foreground">{counts.partners}</p>
+                  <p className="mt-3 text-sm uppercase tracking-[0.35em] text-muted-foreground">Partners supported</p>
+                </motion.div>
+              </motion.div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <motion.a
+                  whileHover={!reduceMotion ? { y: -3, scale: 1.02 } : {}}
+                  whileTap={{ scale: 0.97 }}
+                  href="mailto:abhishekahlawatjeron@gmail.com"
+                  className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background shadow-lg shadow-foreground/10 transition"
+                >
+                  Hire me
+                </motion.a>
+                <motion.a
+                  whileHover={!reduceMotion ? { y: -2, scale: 1.02 } : {}}
+                  href="https://www.linkedin.com/in/abhishek-ahlawat-2350ab232"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-sm font-medium text-muted-foreground transition hover:text-primary"
+                >
+                  LinkedIn →
+                </motion.a>
+                <motion.a
+                  whileHover={!reduceMotion ? { y: -2, scale: 1.02 } : {}}
+                  href="https://github.com/Abhishek18071999"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-sm font-medium text-muted-foreground transition hover:text-primary"
+                >
+                  GitHub →
+                </motion.a>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={sectionMotion}
+              className="relative overflow-hidden rounded-[2.5rem] border border-border/60 bg-card/95 p-8 shadow-[0_90px_160px_-90px_rgba(0,112,255,0.25)] backdrop-blur-xl"
+            >
+              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-primary/10 to-transparent" />
+              <div className="relative space-y-6">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">Impact</p>
+                    <h2 className="mt-4 text-3xl font-semibold text-foreground">Trusted for product-critical systems.</h2>
+                  </div>
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-primary/10 text-primary shadow-sm shadow-primary/10">
+                    <Users size={20} />
+                  </div>
+                </div>
+
+                <div className="grid gap-4">
+                  <motion.div
+                    whileHover={!reduceMotion ? { y: -3 } : {}}
+                    className="rounded-[2rem] border border-border/50 bg-background/80 p-6"
+                  >
+                    <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">Architecture</p>
+                    <p className="mt-3 text-base leading-7 text-foreground/85">
+                      Built strong backend foundations with observability, resilience, and product confidence.
+                    </p>
+                  </motion.div>
+                  <motion.div
+                    whileHover={!reduceMotion ? { y: -3 } : {}}
+                    className="rounded-[2rem] border border-border/50 bg-background/80 p-6"
+                  >
+                    <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">Delivery</p>
+                    <p className="mt-3 text-base leading-7 text-foreground/85">
+                      Delivered launch-ready workflows that reduce risk and make operations smoother.
+                    </p>
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          </section>
+
+          <section id="experience" className="space-y-10 pt-20">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={sectionMotion} className="space-y-4">
+              <p className="text-sm uppercase tracking-[0.35em] text-primary">Experience</p>
+              <h2 className="text-4xl font-semibold text-foreground">Leadership through execution.</h2>
+              <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
+                I design backend products with clear value for partners, operations, and business stakeholders. Every project is built to be measurable, maintainable, and product-led.
+              </p>
+            </motion.div>
+
+            <div className="space-y-8">
+              {experience.map((item, index) => (
+                <motion.article
+                  key={item.company}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={sectionMotion}
+                  transition={{ delay: index * 0.08, ...sectionMotion.transition }}
+                  whileHover={!reduceMotion ? { y: -6, scale: 1.01 } : {}}
+                  whileTap={{ scale: 0.995 }}
+                  className="group overflow-hidden rounded-[2rem] border border-border/60 bg-card p-8 shadow-[0_28px_100px_-80px_rgba(0,112,255,0.22)] transition-transform"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground">{item.period}</p>
+                      <h3 className="mt-3 text-2xl font-semibold text-foreground">{item.role}</h3>
+                      <p className="text-sm text-primary mt-2">{item.company} · {item.location}</p>
+                    </div>
+                    <span className="rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-primary">
+                      Impact
+                    </span>
+                  </div>
+
+                  <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground">{item.result}</p>
+
+                  <ul className="mt-6 space-y-4">
+                    {item.bullets.map((point, idx) => (
+                      <li key={idx} className="flex gap-4 text-muted-foreground">
+                        <span className="mt-1 text-primary">
+                          <Terminal size={16} />
+                        </span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.article>
+              ))}
+            </div>
+          </section>
+
+          <section id="projects" className="space-y-10 pt-20">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={sectionMotion} className="space-y-4">
+              <p className="text-sm uppercase tracking-[0.35em] text-primary">Selected work</p>
+              <h2 className="text-4xl font-semibold text-foreground">Projects that landed trusted outcomes.</h2>
+            </motion.div>
+
+            <div className="grid gap-6 lg:grid-cols-3">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={sectionMotion}
+                  transition={{ delay: index * 0.08, ...sectionMotion.transition }}
+                  whileHover={!reduceMotion ? { y: -6, scale: 1.01 } : {}}
+                  whileTap={{ scale: 0.995 }}
+                  className="group rounded-[2rem] border border-border/60 bg-card p-7 shadow-xl shadow-primary/5 transition-transform hover:border-primary/40"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Featured</p>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                      <ExternalLink size={14} />
+                      Backend
+                    </span>
+                  </div>
+                  <h3 className="mt-6 text-2xl font-semibold text-foreground">{project.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-muted-foreground">{project.description}</p>
+
+                  <div className="mt-6 space-y-3 text-sm text-foreground/80">
+                    {project.impact.map((impact, idx) => (
+                      <p key={idx} className="flex items-start gap-3">
+                        <span className="mt-1 h-2.5 w-2.5 rounded-full bg-primary" />
+                        {impact}
+                      </p>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="rounded-full border border-border/50 bg-background/80 px-3 py-1 text-xs text-muted-foreground">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          <section id="skills" className="space-y-10 pt-20">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={sectionMotion} className="space-y-4">
+              <p className="text-sm uppercase tracking-[0.35em] text-primary">Capabilities</p>
+              <h2 className="text-4xl font-semibold text-foreground">A specialized toolkit for backend product growth.</h2>
+            </motion.div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              {skillGroups.map((group, index) => (
+                <motion.div
+                  key={group.title}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={sectionMotion}
+                  transition={{ delay: index * 0.06, ...sectionMotion.transition }}
+                  whileHover={!reduceMotion ? { y: -4, scale: 1.01 } : {}}
+                  whileTap={{ scale: 0.995 }}
+                  className="rounded-[2rem] border border-border/60 bg-card p-8 shadow-xl shadow-primary/5 transition-transform"
+                >
+                  <div className="mb-5 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.35em] text-muted-foreground">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-3xl bg-primary/10 text-primary">
+                      {group.icon}
+                    </span>
+                    {group.title}
+                  </div>
+                  <div className="grid gap-3">
+                    {group.items.map((item) => (
+                      <div key={item} className="rounded-3xl border border-border/50 bg-background/80 px-4 py-3 text-sm text-foreground/80">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          <section id="contact" className="space-y-10 pt-20">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={sectionMotion} className="rounded-[3rem] border border-border/60 bg-primary/5 p-10 shadow-[0_60px_120px_-70px_rgba(28,81,255,0.18)]">
+              <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-center">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.35em] text-primary">Ready to collaborate</p>
+                  <h2 className="mt-4 text-4xl font-semibold text-foreground">Let's build the backend experience that powers your next launch.</h2>
+                </div>
+                <motion.div whileHover={!reduceMotion ? { y: -4 } : {}} className="flex flex-col gap-4 rounded-[2rem] bg-card p-8 text-foreground shadow-xl shadow-primary/5">
+                  <p className="text-sm text-muted-foreground">Reach out and I’ll respond within one business day.</p>
+                  <a
+                    href="mailto:abhishekahlawatjeron@gmail.com"
+                    className="inline-flex items-center justify-center rounded-full bg-foreground px-6 py-4 text-sm font-semibold text-background transition hover:bg-foreground/90"
+                  >
+                    Contact via email
+                  </a>
+                </motion.div>
+              </div>
+            </motion.div>
+          </section>
+        </main>
+
+        <footer className="border-t border-border/50 bg-background/90 py-8 text-center text-sm text-muted-foreground">
+          © {new Date().getFullYear()} Abhishek Ahlawat — Built for recruiters, hiring managers, and product teams.
+        </footer>
+      </div>
+      <Toaster />
+    </TooltipProvider>
   );
 }
 
