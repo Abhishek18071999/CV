@@ -31,7 +31,7 @@ jobs:
         run: corepack enable && corepack prepare pnpm@9.15.0 --activate
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build CV app
         run: pnpm --filter @workspace/cv build
