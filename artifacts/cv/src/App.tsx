@@ -92,9 +92,15 @@ const experience = [
     location: "Bengaluru, India",
     result: "Modernized API workflows for marketplace connectivity, reliability, and partner onboarding.",
     bullets: [
-      "Designed and launched the Xtream API platform for flight search, pricing, and bookings.",
-      "Created a Developer Corner with docs, examples, and integration guides to speed onboarding.",
-      "Built MongoDB-driven logging and diagnostics to improve production observability.",
+      "Designed and implemented end-to-end integrations with 6+ travel systems and APIs, including TBO, TravelFusion, AerTicket, and Atlas, using SOAP/XML and JSON for flight search, pricing, and booking, with caching, polling, and resilient error handling to ensure reliable, high-availability workflows.",
+      "Enhanced the Sabre integration by adding Fare Rules and Reprice capabilities, improving fare validation accuracy and pricing consistency during booking.",
+      "Architected and developed Xtream, the company’s core RESTful API platform, enabling seamless third-party and OTA integrations through JWT-based authentication and comprehensive API documentation.",
+      "Built Developer Corner with implementation guides and integration resources to accelerate partner onboarding and reduce time-to-integration.",
+      "Implemented MongoDB-based log management with compression, full-text search, and dynamic decompression to improve diagnostics, issue analysis, and operational visibility.",
+      "Resolved production incidents across booking and pricing workflows, strengthening system stability and reducing recurring failures.",
+      "Optimized backend workflows for Branded Fares and Technical Stops while improving performance, scalability, and service reliability.",
+      "Supported clients during integration, UAT, and go-live by clarifying API workflows, request/response structures, authentication, and troubleshooting production issues.",
+      "Mentored junior engineers on system architecture and integration best practices, helping accelerate their ramp-up and technical growth.",
     ],
   },
   {
@@ -156,7 +162,7 @@ function App() {
 
   useEffect(() => {
     if (!countersActive) return;
-    const target = { projects: 3, systems: 24, partners: 12 };
+    const target = { projects: 3, systems: 6, partners: 12 };
     const interval = window.setInterval(() => {
       setCounts((prev) => ({
         projects: Math.min(target.projects, prev.projects + 1),
@@ -338,7 +344,7 @@ function App() {
                   className="rounded-[2rem] border border-border/60 bg-card p-6 shadow-[0_24px_80px_-56px_rgba(139,92,246,0.18)] transition-transform"
                 >
                   <p className="text-4xl font-semibold text-foreground">{counts.systems}</p>
-                  <p className="mt-3 text-sm uppercase tracking-[0.35em] text-muted-foreground">Systems & APIs</p>
+                  <p className="mt-3 text-sm uppercase tracking-[0.35em] text-muted-foreground">6+ Systems & APIs</p>
                 </motion.div>
                 <motion.div
                   whileHover={!reduceMotion ? { y: -4, scale: 1.01 } : {}}
