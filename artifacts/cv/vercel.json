@@ -1,5 +1,5 @@
 {
   "installCommand": "pnpm install --no-frozen-lockfile",
   "buildCommand": "pnpm --filter @workspace/cv build",
-  "outputDirectory": "artifacts/cv/dist"
+  "outputDirectory": "dist/public"
 }
