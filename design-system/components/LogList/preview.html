@@ -1,0 +1,12 @@
+<!-- @dsCard group="Code" height=130 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>LogList — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { maxWidth: 340 } }, h(A.LogList, { query: 'supplier', rows: [{ level: 'INFO', msg: 'booking.confirm pnr=*** 201' }, { level: 'WARN', msg: 'supplier.poll retry 2/3' }, { level: 'INFO', msg: 'cache.hit fares:BLR-DEL' }] })));
+</script>
+</body>
+</html>

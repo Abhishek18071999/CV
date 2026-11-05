@@ -1,0 +1,16 @@
+<!-- @dsCard group="Navigation" height=260 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Timeline — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(A.Timeline, { period: 'Jan 2025 — Present', company: 'Corefares Consulting', role: 'Software Engineer', location: 'Bengaluru, India', current: true,
+  bullets: [
+    { lead: 'Sabre Fare Rules & Reprice', text: 'Added Fare Rules and Reprice features to the Sabre integration, enabling accurate fare validation and up-to-date pricing during the booking flow.' },
+    { lead: 'Xtream API platform', text: 'Designed and developed the company’s core RESTful API platform, enabling third-party and OTA integrations with JWT-based authentication and clear API documentation.' }],
+  stack: ['C#', 'ASP.NET Web API', 'REST', 'SOAP/XML', 'JWT', 'MongoDB', 'Redis', 'Sabre'] }));
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+{
+  "v": 3,
+  "layout": "files",
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-05T23:07:46.995Z"
+  },
+  "title": "Ahlawat",
+  "namespace": "Ahlawat",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18.3.1"
+    },
+    {
+      "name": "react-dom",
+      "version": "18.3.1"
+    }
+  ],
+  "sections": {},
+  "groups": [
+    "Logos",
+    "Icons"
+  ],
+  "assetGroups": {
+    "Logos": {
+      "name": "Logos",
+      "tile": "l",
+      "order": [
+        "monogram.svg"
+      ],
+      "files": {
+        "monogram.svg": {
+          "name": "monogram.svg",
+          "blob": "79f8fe53c879faaa4f7ee4268042a091",
+          "size": 317,
+          "type": "image/svg+xml"
+        }
+      }
+    },
+    "Icons": {
+      "name": "Icons",
+      "tile": "s",
+      "order": [
+        "arrow-up-right.svg",
+        "arrow-right.svg",
+        "arrow-down-to-line.svg",
+        "external-link.svg",
+        "command.svg",
+        "search.svg",
+        "x.svg",
+        "copy.svg",
+        "sun.svg",
+        "moon.svg",
+        "map-pin.svg",
+        "braces.svg",
+        "plane.svg",
+        "file-search.svg",
+        "book-open-text.svg",
+        "calendar-clock.svg",
+        "workflow.svg",
+        "handshake.svg",
+        "award.svg",
+        "github.svg",
+        "linkedin.svg"
+      ],
+      "files": {
+        "arrow-up-right.svg": {
+          "name": "arrow-up-right.svg",
+          "blob": "16e3d6a35f1e92792cafadd9b7a114e2",
+          "size": 236,
+          "type": "image/svg+xml"
+        },
+        "arrow-right.svg": {
+          "name": "arrow-right.svg",
+          "blob": "332b36e8a3ec3f81f279eb123973ff5b",
+          "size": 237,
+          "type": "image/svg+xml"
+        },
+        "arrow-down-to-line.svg": {
+          "name": "arrow-down-to-line.svg",
+          "blob": "81f5863fce51a83e89e78d4e90ad32ab",
+          "size": 261,
+          "type": "image/svg+xml"
+        },
+        "external-link.svg": {
+          "name": "external-link.svg",
+          "blob": "8b928e17725fcd1c9ec8d3d830f6cff8",
+          "size": 308,
+          "type": "image/svg+xml"
+        },
+        "command.svg": {
+          "name": "command.svg",
+          "blob": "b34c91f2a02ba3c0f896a42aecdae08f",
+          "size": 271,
+          "type": "image/svg+xml"
+        },
+        "search.svg": {
+          "name": "search.svg",
+          "blob": "d64c796fdc3e7c0261c773af56804c03",
+          "size": 251,
+          "type": "image/svg+xml"
+        },
+        "x.svg": {
+          "name": "x.svg",
+          "blob": "1825dd2fc77e1b67233d041e3ec9c1a2",
+          "size": 236,
+          "type": "image/svg+xml"
+        },
+        "copy.svg": {
+          "name": "copy.svg",
+          "blob": "7a889069b1b79676b28fd8f32dafe3f7",
+          "size": 315,
+          "type": "image/svg+xml"
+        },
+        "sun.svg": {
+          "name": "sun.svg",
+          "blob": "1a3da1ff0680ee3f710ceaa2605ca677",
+          "size": 461,
+          "type": "image/svg+xml"
+        },
+        "moon.svg": {
+          "name": "moon.svg",
+          "blob": "f096be432db583f9bac7c5c621d3ea9f",
+          "size": 310,
+          "type": "image/svg+xml"
+        },
+        "map-pin.svg": {
+          "name": "map-pin.svg",
+          "blob": "ae012afd83b447fbc4183a04eb8efe32",
+          "size": 335,
+          "type": "image/svg+xml"
+        },
+        "braces.svg": {
+          "name": "braces.svg",
+          "blob": "a0a7885973a4b98bf95ff2df255a18cf",
+          "size": 356,
+          "type": "image/svg+xml"
+        },
+        "plane.svg": {
+          "name": "plane.svg",
+          "blob": "e75206a27f659613d81fc8e672747de6",
+          "size": 397,
+          "type": "image/svg+xml"
+        },
+        "file-search.svg": {
+          "name": "file-search.svg",
+          "blob": "58cceb67db0cb7b6fac18fa24744cadf",
+          "size": 371,
+          "type": "image/svg+xml"
+        },
+        "book-open-text.svg": {
+          "name": "book-open-text.svg",
+          "blob": "5730819053716a509872e56f3789b15b",
+          "size": 446,
+          "type": "image/svg+xml"
+        },
+        "calendar-clock.svg": {
+          "name": "calendar-clock.svg",
+          "blob": "0a648a7cd2cea962f8057d261a78ba88",
+          "size": 395,
+          "type": "image/svg+xml"
+        },
+        "workflow.svg": {
+          "name": "workflow.svg",
+          "blob": "845444d8760984fd09bbadd28d4c2f1e",
+          "size": 327,
+          "type": "image/svg+xml"
+        },
+        "handshake.svg": {
+          "name": "handshake.svg",
+          "blob": "4ab618ee7bdc5ecc55c661e0ceab292a",
+          "size": 481,
+          "type": "image/svg+xml"
+        },
+        "award.svg": {
+          "name": "award.svg",
+          "blob": "951074dd2e00926826fe11104397670d",
+          "size": 352,
+          "type": "image/svg+xml"
+        },
+        "github.svg": {
+          "name": "github.svg",
+          "blob": "6654ffca3fa35c7cb003b607179fd70d",
+          "size": 1423,
+          "type": "image/svg+xml"
+        },
+        "linkedin.svg": {
+          "name": "linkedin.svg",
+          "blob": "6dbd5c1a430688932e238a881577f776",
+          "size": 419,
+          "type": "image/svg+xml"
+        }
+      }
+    }
+  },
+  "blobs": {},
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "lastChange": {
+    "by": "Abhishek",
+    "at": "2026-11-05T23:15:32.472Z",
+    "via": "Claude Code · Resume-Enhancer@130afdb",
+    "note": "Added CommandMenu (⌘K palette) with overlay and shadow-dialog tokens."
+  }
+}

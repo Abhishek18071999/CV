@@ -1,0 +1,16 @@
+<!-- @dsCard group="Content" height=150 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>StatGrid — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(A.StatGrid, { items: [
+  { value: '2+', label: 'Years shipping production backends' },
+  { value: '3', label: 'Languages — C#, Java, Python' },
+  { value: '5', label: 'Travel supplier & GDS integrations' },
+  { value: '80.55%', label: 'MCA, Birla Institute of Technology' }] }));
+</script>
+</body>
+</html>

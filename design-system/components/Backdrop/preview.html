@@ -1,0 +1,13 @@
+<!-- @dsCard group="Surfaces" height=240 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Backdrop — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(A.Backdrop, { grain: true, style: { height: 220, display: 'flex', alignItems: 'flex-end', padding: 24 } },
+  h('h2', { style: { margin: 0, fontSize: 44, fontWeight: 500, letterSpacing: '-0.045em', lineHeight: 0.95 } }, "Let's build something ", h('span', { className: 'ah-accent' }, 'reliable.'))));
+</script>
+</body>
+</html>

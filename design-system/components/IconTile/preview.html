@@ -1,0 +1,12 @@
+<!-- @dsCard group="Surfaces" height=80 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>IconTile — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'flex', gap: 12 } }, ['braces', 'plane', 'file-search', 'workflow', 'handshake', 'award'].map(function (n) { return h(A.IconTile, { key: n, icon: n }); })));
+</script>
+</body>
+</html>

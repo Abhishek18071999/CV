@@ -1,0 +1,49 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ahlawat — cover</title>
+<style>
+  html, body { margin: 0; height: 100%; background: var(--background); }
+  .cover { position: relative; width: 960px; height: 288px; overflow: hidden; background: var(--background); }
+  .cover svg { position: absolute; inset: 0; }
+  .p { fill: var(--primary); }
+  .ink { fill: var(--foreground); }
+  .key { fill: var(--syntax-key); }
+  .num { fill: var(--syntax-number); }
+  .tint { fill: var(--primary-tint); }
+  .glyph { fill: var(--background); font-family: var(--font-serif); font-style: italic; font-size: 380px; }
+  .slab { rx: var(--radius-3xl); ry: var(--radius-3xl); }
+  .text { position: absolute; left: 40px; bottom: 36px; max-width: 440px; }
+  .name {
+    margin: 0; font-family: var(--font-sans); font-weight: 500; font-size: 100px; line-height: .92;
+    letter-spacing: -0.055em; color: var(--foreground);
+  }
+  .tag { margin: 14px 0 0; font-family: var(--font-sans); font-size: 14px; line-height: 20px; color: var(--muted-foreground); }
+</style>
+</head>
+<body>
+<div class="cover">
+  <!--
+    blocks: primary slab 224×248 (4 × grid-pitch wide, radius-3xl corners); foreground pill 168×56; syntax-key disc 56; syntax-number pill 112×56; primary-tint pill 184×56 (pills rx = 28, half of control-xl).
+    arrangement: one tall slab bleeding off the top with satellites stacked on the 56px grid to its right, the lower pills bleeding off the right edge.
+    pattern: "a distinctive display face → one oversized glyph" — the serif-italic 'a' monogram is the brand's mark, so it is cut out of the slab in background.
+    scales: grid-pitch 56px, space-6 24px / space-12 gaps, radius-3xl 24px, radius-full pills.
+  -->
+  <svg width="960" height="288" viewBox="0 0 960 288" aria-hidden="true">
+    <defs><clipPath id="slabclip"><rect class="slab" x="528" y="-24" width="224" height="272" /></clipPath></defs>
+    <rect class="p slab" x="528" y="-24" width="224" height="272" />
+    <text class="glyph" x="560" y="300" clip-path="url(#slabclip)">a</text>
+    <rect class="ink" x="776" y="40" width="168" height="56" rx="28" ry="28" />
+    <circle class="key" cx="804" cy="152" r="28" />
+    <rect class="num" x="848" y="124" width="140" height="56" rx="28" ry="28" />
+    <rect class="tint" x="776" y="208" width="212" height="56" rx="28" ry="28" />
+  </svg>
+  <div class="text">
+    <h1 class="name">Ahlawat</h1>
+    <p class="tag">Ink and paper, one mint accent, and code as the hero image.</p>
+  </div>
+</div>
+</body>
+</html>

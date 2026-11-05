@@ -1,0 +1,17 @@
+<!-- @dsCard group="Content" height=150 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>SkillTag — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { maxWidth: 360 } },
+  h('div', { className: 'ah-skill-group-head' }, h('h3', { className: 'ah-skill-group-title' }, 'Databases & Caching'), h('span', { className: 'ah-count' }, '03')),
+  h('ul', { className: 'ah-skill-list' },
+    h(A.SkillTag, { as: 'li', state: 'hit' }, 'MySQL'),
+    h(A.SkillTag, { as: 'li', state: 'dim' }, 'MongoDB'),
+    h(A.SkillTag, { as: 'li', state: 'dim' }, 'Redis'))));
+</script>
+</body>
+</html>

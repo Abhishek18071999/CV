@@ -1,0 +1,21 @@
+<!-- @dsCard group="Actions" height=140 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Button — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'grid', gap: 16 } },
+  h('div', { style: { display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' } },
+    h(A.Button, { arrow: true, glow: true }, 'Get in touch'),
+    h(A.Button, { variant: 'outline', icon: 'linkedin', label: 'LinkedIn' }),
+    h(A.Button, { variant: 'outline', icon: 'github', label: 'GitHub' }),
+    h(A.Button, { size: 'lg', arrow: true }, 'Send an email')),
+  h('div', { style: { display: 'flex', gap: 4, alignItems: 'center' } },
+    h(A.Button, { variant: 'ink', size: 'sm', icon: 'arrow-down-to-line' }, 'Resume'),
+    h(A.Button, { variant: 'ghost', size: 'sm', icon: 'sun', label: 'Switch theme' }),
+    h(A.Button, { variant: 'ghost', size: 'sm' }, 'Ghost'))));
+</script>
+</body>
+</html>

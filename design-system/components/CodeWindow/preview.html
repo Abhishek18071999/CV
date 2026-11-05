@@ -1,0 +1,12 @@
+<!-- @dsCard group="Code" height=200 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>CodeWindow — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(A.CodeWindow, { title: 'xtream / search', method: 'POST', path: '/api/v1/flights/search', headers: [['Authorization', 'Bearer eyJhbGciOi…'], ['Content-Type', 'application/json']], body: { origin: 'BLR', destination: 'DEL', adults: 1 } }));
+</script>
+</body>
+</html>

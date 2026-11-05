@@ -1,0 +1,14 @@
+<!-- @dsCard group="Content" height=96 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>StatusPill — preview</title></head>
+<body>
+<div id="root" class="ah" style="padding:24px"></div>
+<script>
+  var A = window.Ahlawat, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' } },
+  h(A.StatusPill, { href: '#contact' }, 'Open to new opportunities'),
+  h(A.StatusPill, { variant: 'current' })));
+</script>
+</body>
+</html>
