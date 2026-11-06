@@ -34,6 +34,13 @@ jobs:
       - name: Build CV app
         run: pnpm --filter @workspace/cv build
 
+      # gh-pages holds only built files. Vercel's Root Directory is artifacts/cv,
+      # so leave a vercel.json there telling Vercel not to deploy this branch.
+      - name: Stop Vercel deploying the gh-pages branch
+        run: |
+          mkdir -p artifacts/cv/dist/public/artifacts/cv
+          echo '{ "git": { "deploymentEnabled": false } }' > artifacts/cv/dist/public/artifacts/cv/vercel.json
+
       - name: Deploy to GitHub Pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
