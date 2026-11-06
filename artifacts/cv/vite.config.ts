@@ -32,7 +32,8 @@ export default defineConfig({
   },
   root: path.resolve(import.meta.dirname),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    // Vercel serves artifacts/cv/dist; GitHub Pages publishes artifacts/cv/dist/public.
+    outDir: path.resolve(import.meta.dirname, process.env.VERCEL ? "dist" : "dist/public"),
     emptyOutDir: true,
   },
   server: {
